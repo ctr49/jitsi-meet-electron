@@ -13,6 +13,7 @@ matrix:
       addons:
         apt:
           packages:
+            - gcc-multilib
             - libx11-dev
             - zlib1g-dev
             - libpng-dev
