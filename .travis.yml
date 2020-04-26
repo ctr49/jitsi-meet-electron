@@ -19,6 +19,10 @@ matrix:
             - zlib1g-dev
             - libpng-dev
             - libxtst-dev
+            - libx11:i686
+            - zlib1g:i686
+            - libpng:i686
+            - libxtst:i686
 
 script:
   - npm run dist
