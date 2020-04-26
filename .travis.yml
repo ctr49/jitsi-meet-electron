@@ -13,16 +13,25 @@ matrix:
       addons:
         apt:
           packages:
-            - gcc-multilib
-            - g++-multilib
             - libx11-dev
             - zlib1g-dev
             - libpng-dev
             - libxtst-dev
-            - libx11:i686
-            - zlib1g:i686
-            - libpng:i686
-            - libxtst:i686
+
+    - os: linux
+      dist: bionic
+      sudo: true
+      language: node_js
+      node_js: '12'
+      addons:
+        apt:
+          packages:
+            - gcc-multilib
+            - g++-multilib
+            - libx11-dev:i386
+            - zlib1g-dev:i386
+            - libpng-dev:i386
+            - libxtst-dev:i386
 
 script:
   - npm run dist
