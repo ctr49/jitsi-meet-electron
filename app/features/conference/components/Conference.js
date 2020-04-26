@@ -7,17 +7,8 @@ import type { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 
-import {
-    RemoteControl,
-    setupScreenSharingRender,
-    setupAlwaysOnTopRender,
-    initPopupsConfigurationRender,
-    setupWiFiStats,
-    setupPowerMonitorRender
-} from 'jitsi-meet-electron-utils';
-
 import config from '../../config';
-import { setEmail, setName } from '../../settings';
+import { getSetting, setEmail, setName } from '../../settings';
 
 import { conferenceEnded, conferenceJoined } from '../actions';
 import { LoadingIndicator, Wrapper } from '../styled';
@@ -34,6 +25,11 @@ type Props = {
      * React Router location object.
      */
     location: Object;
+
+    /**
+     * AlwaysOnTop Window Enabled.
+     */
+    _alwaysOnTopWindowEnabled: boolean;
 
     /**
      * Avatar URL.
@@ -259,13 +255,27 @@ class Conference extends Component<Props, State> {
             parentNode,
             roomName: this._conference.room
         });
+
+        const { RemoteControl,
+            setupScreenSharingRender,
+            setupAlwaysOnTopRender,
+            initPopupsConfigurationRender,
+            setupWiFiStats,
+            setupPowerMonitorRender
+        } = window.jitsiNodeAPI.jitsiMeetElectronUtils;
+
         initPopupsConfigurationRender(this._api);
 
         const iframe = this._api.getIFrame();
 
         setupScreenSharingRender(this._api);
         new RemoteControl(iframe); // eslint-disable-line no-new
-        setupAlwaysOnTopRender(this._api);
+
+        // Allow window to be on top if enabled in settings
+        if (this.props._alwaysOnTopWindowEnabled) {
+            setupAlwaysOnTopRender(this._api);
+        }
+
         setupWiFiStats(iframe);
         setupPowerMonitorRender(this._api);
 
@@ -393,17 +403,12 @@ class Conference extends Component<Props, State> {
  * Maps (parts of) the redux state to the React props.
  *
  * @param {Object} state - The redux state.
- * @returns {{
- *     _avatarURL: string,
- *     _email: string,
- *     _name: string,
- *     _serverURL: string,
- *     _startWithAudioMuted: boolean,
- *     _startWithVideoMuted: boolean
- * }}
+ * @returns {Props}
  */
 function _mapStateToProps(state: Object) {
     return {
+        _alwaysOnTopWindowEnabled:
+            getSetting(state, 'alwaysOnTopWindowEnabled', true),
         _avatarURL: state.settings.avatarURL,
         _email: state.settings.email,
         _name: state.settings.name,

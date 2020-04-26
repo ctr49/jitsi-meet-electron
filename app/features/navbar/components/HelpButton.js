@@ -7,6 +7,7 @@ import React, { Component } from 'react';
 
 import config from '../../config';
 import { openExternalLink } from '../../utils';
+import { version } from '../../../../package.json';
 
 type State = {
 
@@ -33,6 +34,7 @@ export default class HelpButton extends Component< *, State> {
         };
 
         this._onAboutClick = openExternalLink.bind(undefined, config.aboutURL);
+        this._onSourceClick = openExternalLink.bind(undefined, config.sourceURL);
         this._onIconClick = this._onIconClick.bind(this);
         this._onOpenChange = this._onOpenChange.bind(this);
         this._onPrivacyClick
@@ -44,6 +46,8 @@ export default class HelpButton extends Component< *, State> {
     }
 
     _onAboutClick: (*) => void;
+
+    _onSourceClick: (*) => void;
 
     _onIconClick: (*) => void;
 
@@ -102,6 +106,12 @@ export default class HelpButton extends Component< *, State> {
                     </Item>
                     <Item onActivate = { this._onAboutClick }>
                         About
+                    </Item>
+                    <Item onActivate = { this._onSourceClick }>
+                        Source
+                    </Item>
+                    <Item>
+                        Version: { version }
                     </Item>
                 </Group>
             </Droplist>
