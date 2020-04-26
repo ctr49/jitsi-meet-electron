@@ -46,10 +46,6 @@
         },
         {
           "arch": "ia32",
-          "target": "AppImage"
-        },
-        {
-          "arch": "ia32",
           "target": "deb"
         }
       ]
